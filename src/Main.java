@@ -1,6 +1,7 @@
 import bn.base.Assignment;
 import bn.base.BayesianNetwork;
 import bn.base.Domain;
+import bn.core.RandomVariable;
 import bn.core.Value;
 import bn.parser.XMLBIFParser;
 import org.xml.sax.SAXException;
@@ -13,16 +14,24 @@ public class Main {
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
         XMLBIFParser parser = new XMLBIFParser();
-        BayesianNetwork network = (BayesianNetwork) parser.readNetworkFromFile("src/examples/aima-alarm.xml");
+        BayesianNetwork network = (BayesianNetwork) parser.readNetworkFromFile(args[1]);
+
+        RandomVariable queryVariable = network.getVariableByName(args[2]);
+
+        Assignment assignment = new Assignment();
+        int index = 3;
+        while (index < args.length) {
+            RandomVariable variable = network.getVariableByName(args[index++]);
+            Value value = ((bn.base.Domain) variable.getDomain()).getValueByString(args[index++]);
+            assignment.put(variable, value);
+            System.out.println(variable);
+            System.out.println(value);
+        }
+
+        System.out.println();
         System.out.println(network);
 
         ExactInference inference = new ExactInference();
-        Assignment assignment = new Assignment();
-        assignment.put(network.getVariableByName("M"), network.getVariableByName("M").getDomain().iterator().next());
-        assignment.put(network.getVariableByName("J"), network.getVariableByName("J").getDomain().iterator().next());
-        System.out.println(inference.EnumerationAsk(network.getVariableByName("B"), assignment, network));
-
-        bn.base.Domain domain = (Domain) network.getVariableByName("M").getDomain();
-        System.out.println(domain.getValueByString("true"));
+        System.out.println(inference.EnumerationAsk(queryVariable, assignment, network));
     }
 }
