@@ -29,28 +29,35 @@ public class Main {
             assignment.put(variable, value);
         }
 
-        System.out.println("Uncertain Inference made by ....");
+        System.out.println("Uncertain Inference made by hekl0 and Hoang Le");
         System.out.println();
         System.out.println("Please choose algorithm:");
         System.out.println("  1. Exact Inference");
-        System.out.println("  2. Quen ten r ~~");
-        System.out.println("  3. Quen ten not");
-        System.out.println("  4. Gibbs");
+        System.out.println("  2. Reject Sampling");
+        System.out.println("  3. Likelihood Weighting");
+        System.out.println("  4. Gibbs Sampling");
         System.out.print("Your choice: ");
         int algo = scanner.nextInt();
-
+        int numSamples = 0;
         switch (algo) {
             case 1:
                 ExactInference inference = new ExactInference();
                 System.out.println(inference.EnumerationAsk(queryVariable, assignment, network));
                 break;
             case 2:
+                System.out.print("Number of Samples: ");
+                numSamples = scanner.nextInt();
+                RejectSampling rejectSampling = new RejectSampling();
+                System.out.println(rejectSampling.rejectionSampling(queryVariable,assignment,network,numSamples));
                 break;
             case 3:
+                System.out.print("Number of Samples: ");
+                numSamples = scanner.nextInt();
+                LikelihoodWeighting likelihoodWeighting = new LikelihoodWeighting();
                 break;
             case 4:
                 System.out.print("Number of Samples: ");
-                int numSamples = scanner.nextInt();
+                numSamples = scanner.nextInt();
                 Gibbs gibbs = new Gibbs();
                 System.out.println(gibbs.GibbsAsk(queryVariable, assignment, network, numSamples));
                 break;
