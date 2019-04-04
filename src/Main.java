@@ -1,6 +1,5 @@
 import bn.base.Assignment;
 import bn.base.BayesianNetwork;
-import bn.base.Domain;
 import bn.core.RandomVariable;
 import bn.core.Value;
 import bn.parser.XMLBIFParser;
@@ -8,7 +7,6 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
