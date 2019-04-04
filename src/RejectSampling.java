@@ -23,11 +23,33 @@ public class RejectSampling {
 
     public Assignment priorSample(BayesianNetwork bn) {
         Assignment result = new Assignment();
-        for (RandomVariable variable : bn.getVariablesSortedTopologically())
-            result.put(variable, variable.getDomain().iterator().next());
         for (RandomVariable var : bn.getVariablesSortedTopologically()) {
-            result.put(var,Gibbs.sampling(var,result.copy(),bn));
+            result.put(var, sampling(var,result.copy(),bn));
         }
         return result;
+    }
+
+    public Value sampling(RandomVariable variable, bn.core.Assignment assignment, bn.base.BayesianNetwork bayesianNetwork) {
+        Distribution distribution = new Distribution(variable);
+
+        for (Value value: variable.getDomain()) {
+            assignment.put(variable, value);
+            bn.base.BayesianNetwork.Node node = bayesianNetwork.getNodeForVariable(variable);
+
+            double w = node.cpt.get(value, assignment);
+
+            distribution.set(value, w);
+        }
+
+        distribution.normalize();
+
+        double random = 1 - Math.random();
+        for (Value value: distribution.keySet()) {
+            random -= distribution.get(value);
+            if (random <= 0)
+                return value;
+        }
+
+        return null;
     }
 }

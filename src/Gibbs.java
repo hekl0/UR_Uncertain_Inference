@@ -39,7 +39,7 @@ public class Gibbs {
         return distribution;
     }
 
-    public static Value sampling(RandomVariable variable, Assignment assignment, bn.base.BayesianNetwork bayesianNetwork) {
+    public Value sampling(RandomVariable variable, Assignment assignment, bn.base.BayesianNetwork bayesianNetwork) {
         Distribution distribution = new Distribution(variable);
 
         for (Value value: variable.getDomain()) {
