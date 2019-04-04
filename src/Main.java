@@ -54,6 +54,7 @@ public class Main {
                 System.out.print("Number of Samples: ");
                 numSamples = scanner.nextInt();
                 LikelihoodWeighting likelihoodWeighting = new LikelihoodWeighting();
+                System.out.println(likelihoodWeighting.likelihoodWeighting(queryVariable,assignment,network,numSamples));
                 break;
             case 4:
                 System.out.print("Number of Samples: ");

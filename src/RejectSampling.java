@@ -16,17 +16,28 @@ public class RejectSampling {
                 distribution.set(x.get(X), distribution.get(x.get(X)) + 1);
             }
         }
-        distribution.normalize();
+        //distribution.normalize();
         return distribution;
 
     }
 
     public Assignment priorSample(BayesianNetwork bn) {
         Assignment result = new Assignment();
-        for (RandomVariable variable : bn.getVariablesSortedTopologically())
-            result.put(variable, variable.getDomain().iterator().next());
-        for (RandomVariable var : bn.getVariablesSortedTopologically()) {
-            result.put(var,Gibbs.sampling(var,result.copy(),bn));
+        for (RandomVariable var : bn.getVariablesSortedTopologically()){
+            Distribution distribution = new Distribution(var);
+            for (Value value : var.getDomain()){
+                distribution.put(value,bn.getNodeForVariable(var).cpt.get(value,result));
+            }
+            distribution.normalize();
+            System.out.println(distribution);
+
+            double random = 1 - Math.random();
+            for (Value value: distribution.keySet()) {
+                random -= distribution.get(value);
+                if (random <= 0) {
+                    result.put(var, value);
+                }
+            }
         }
         return result;
     }
